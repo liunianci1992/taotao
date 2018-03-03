@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.itcast.mybatis.mapper.UserMapper">
+
+	<select id="queryUsers" resultType="User">
+		select * from tb_user
+	</select>
+	
+	<!-- 
+		批量删除：组成的语句形如：
+		delete from tb_user where id in(1,2,3)
+	 -->
+	<delete id="deleteByIds">
+		delete from tb_user where id in
+		<foreach collection="ids" item="id" open="(" close=")" separator=",">#{id}</foreach>
+	</delete>
+</mapper>
