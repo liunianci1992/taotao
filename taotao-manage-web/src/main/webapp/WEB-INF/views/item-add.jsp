@@ -91,7 +91,7 @@
 			return ;
 		}
 		$("#itemAddForm [name=price]").val(eval($("#itemAddForm [name=priceView]").val()) * 100);
-		itemAddEditor.sync();
+		itemAddEditor.sync();//同步富文本编辑器的内容
 				
 		//提交到后台的RESTful
 		$.ajax({
@@ -114,27 +114,37 @@
 	
 	//类目选择初始化
 	function initItemCat(){
+		//选取标签的class的值为selectItemCat的那些元素----a
 		var selectItemCat = $(".selectItemCat");
+		//对上面选择的标签注册点击事件
    		selectItemCat.click(function(){
+   			//创建div标签并设置其内边距为5px，并设置其内容为一个ul,最后将div渲染为easy ui window
    			$("<div>").css({padding:"5px"}).html("<ul>")
    			.window({
    				width:'500',
    			    height:"450",
-   			    modal:true,
+   			    modal:true,//模式化窗口
    			    closed:true,
    			    iconCls:'icon-save',
    			    title:'选择类目',
-   			    onOpen : function(){
+   			    onOpen : function(){//在打开面板之后触发。
+   			    	//this表示当前的easyui window----div
    			    	var _win = this;
+   			    	//在div里面选取ul标签并将ul渲染为tree
    			    	$("ul",_win).tree({
    			    		url:'/rest/item/cat',
    			    		method:'GET',
    			    		animate:true,
-   			    		onClick : function(node){
+   			    		onClick : function(node){//点击树上的节点
+   			    			//this 表示当前的树，node表示当前点击的节点（easy ui 对象）
+   			    			//如果当前点击的节点是叶子节点的话；
    			    			if($(this).tree("isLeaf",node.target)){
    			    				// 填写到cid中
+   			    				//将td里面的元素的属性name的值的表单项的值设置为当前点击节点的id
    			    				selectItemCat.parent().find("[name=cid]").val(node.id);
+   			    				//a标签的下一个元素span的内容设置为当前点击的节点的中文名称
    			    				selectItemCat.next().text(node.text);
+   			    				//关闭窗口
    			    				$(_win).window('close');
    			    			}
    			    		}

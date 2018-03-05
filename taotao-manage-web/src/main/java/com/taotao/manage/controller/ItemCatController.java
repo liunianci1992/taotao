@@ -20,19 +20,43 @@ public class ItemCatController {
 	
 	@Autowired
 	private ItemCatService itemCatService;
+	
+	/**
+	 * 根据商品父类目id查询该类目的所有子类目
+	 * @param parentId 父类目id
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<List<ItemCat>> queryItemCatListByParentId(
+			@RequestParam(value="id", defaultValue="0")Long parentId){
+		
+		try {
+			ItemCat itemCat = new ItemCat();
+			itemCat.setParentId(parentId);
+			List<ItemCat> list = itemCatService.queryByWhere(itemCat);
+			
+			return ResponseEntity.ok(list);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		//返回500
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
 
 	/**
 	 * 分页查询商品类目列表
 	 * @param pageNo 页号
 	 * @param rows 页大小
-	 * @return
+	 * @return 
 	 */
 	@RequestMapping(value="/query/{pageNo}", method = RequestMethod.GET)
 	public ResponseEntity<List<ItemCat>> queryItemCatListByPage(@PathVariable Integer pageNo, 
 			@RequestParam(value = "rows", defaultValue = "20")Integer rows){
 		
 		try {
-			List<ItemCat> list = itemCatService.queryItemCatListByPage(pageNo, rows);
+			//List<ItemCat> list = itemCatService.queryItemCatListByPage(pageNo, rows);
+			List<ItemCat> list = itemCatService.queryByPage(null, pageNo, rows);
 			
 			return ResponseEntity.ok(list);
 		} catch (Exception e) {

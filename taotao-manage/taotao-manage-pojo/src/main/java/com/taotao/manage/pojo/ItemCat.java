@@ -73,5 +73,14 @@ public class ItemCat extends BasePojo {
     public void setIsParent(Boolean isParent) {
         this.isParent = isParent;
     }
+    
+    //为了easyui tree组件需要text和state才拓展如下两个方法
+    public String getText() {
+    	return getName();
+    }
+    
+    public String getState() {
+    	return getIsParent()?"closed":"open";
+    }
 
 }
