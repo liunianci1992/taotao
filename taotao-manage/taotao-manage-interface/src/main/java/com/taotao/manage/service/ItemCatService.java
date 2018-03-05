@@ -1,0 +1,17 @@
+package com.taotao.manage.service;
+
+import java.util.List;
+
+import com.taotao.manage.pojo.ItemCat;
+
+public interface ItemCatService {
+
+	/**
+	 * 分页查询商品类目列表
+	 * @param pageNo 页号
+	 * @param rows 页大小
+	 * @return
+	 */
+	List<ItemCat> queryItemCatListByPage(Integer pageNo, Integer rows);
+
+}
