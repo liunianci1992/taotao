@@ -163,14 +163,16 @@
        		var form = $('#itemAddForm');
        		KindEditor.editor(kingEditorParams).loadPlugin('multiimage',function(){
        			var editor = this;
+       			//回显在插件上面
        			editor.plugin.multiImageDialog({
-					clickFn : function(urlList) {
+					clickFn : function(urlList) {//点击 全部插入
 						$(".pics li").remove();
-						var imgArray = [];
+						var imgArray = [];//本次上传的多张图片的地址
 						KindEditor.each(urlList, function(i, data) {
 							imgArray.push(data.url);
 							$(".pics ul").append("<li><a href='"+data.url+"' target='_blank'><img src='"+data.url+"' width='80' height='50' /></a></li>");
 						});
+						//将商品的多张图片地址设置到即将提交的商品基本信息（图片）字段
 						form.find("[name=image]").val(imgArray.join(","));
 						editor.hideDialog();
 					}

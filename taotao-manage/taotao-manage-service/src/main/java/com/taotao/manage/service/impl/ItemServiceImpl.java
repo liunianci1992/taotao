@@ -1,15 +1,25 @@
 package com.taotao.manage.service.impl;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Date;
+import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.taotao.common.vo.DataGridResult;
 import com.taotao.manage.mapper.ItemDescMapper;
 import com.taotao.manage.mapper.ItemMapper;
 import com.taotao.manage.pojo.Item;
 import com.taotao.manage.pojo.ItemDesc;
 import com.taotao.manage.service.ItemService;
+
+import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.entity.Example.Criteria;
 
 @Service
 public class ItemServiceImpl extends BaseServiceImpl<Item> implements ItemService {
@@ -48,6 +58,35 @@ public class ItemServiceImpl extends BaseServiceImpl<Item> implements ItemServic
 		itemDesc.setItemId(item.getId());
 		itemDesc.setUpdated(new Date());
 		itemDescMapper.updateByPrimaryKeySelective(itemDesc);
+	}
+
+	@Override
+	public DataGridResult queryItemListByTitle(String title, Integer page, Integer rows) {
+		//设置分页
+		PageHelper.startPage(page, rows);
+		
+		Example example = new Example(Item.class);
+		
+		//添加查询条件
+		if(StringUtils.isNotBlank(title)) {
+			try {
+				Criteria criteria = example.createCriteria();
+				title = URLDecoder.decode(title, "utf-8");
+				criteria.andLike("title", "%" + title + "%");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		//根据更新时间降序排
+		example.orderBy("updated").desc();
+		
+		//查询
+		List<Item> list = itemMapper.selectByExample(example);
+		
+		PageInfo<Item> pageInfo = new PageInfo<>(list);
+		
+		return new DataGridResult(pageInfo.getTotal(), pageInfo.getList());
 	}
 
 }

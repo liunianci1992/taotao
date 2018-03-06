@@ -138,12 +138,12 @@
     },{
         text:'<input type="text" id="search" name="search">'
     }];
-    
+   
     $(document).ready(function(){
     	
     	$("#itemList").datagrid({
     		singleSelect:false,
-    		collapsible:true,
+    		collapsible:true,//可折叠
     		pagination:true,
     		url:'/rest/item',
     		method:'get',

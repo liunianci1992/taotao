@@ -22,6 +22,27 @@ public class ItemCatController {
 	private ItemCatService itemCatService;
 	
 	/**
+	 * 根据商品类目id查询商品类目
+	 * @param categoryId 类目id
+	 * @return
+	 */
+	@RequestMapping(value = "/{categoryId}", method = RequestMethod.GET)
+	public ResponseEntity<ItemCat> queryItemDescByItemId(@PathVariable Long categoryId){
+		
+		try {
+			ItemCat itemCat = itemCatService.queryById(categoryId);
+			
+			return ResponseEntity.ok(itemCat);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
+	
+
+	
+	/**
 	 * 根据商品父类目id查询该类目的所有子类目
 	 * @param parentId 父类目id
 	 * @return

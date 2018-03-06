@@ -20,6 +20,14 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 	
+	<!-- 配置文件上传解析器 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 默认文件编码 -->
+		<property name="defaultEncoding" value="UTF-8"></property>
+		<!-- 文件最大上传大小：5000000 -->
+		<property name="maxUploadSize" value="5000000"></property>
+	</bean>
+	
 	<!-- 配置dubbo服务 -->
 	<dubbo:application name="taotao-manage-web" />
 
